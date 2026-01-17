@@ -307,7 +307,7 @@ git clone https://github.com/shiahonb777/web-to-app.git
 | ✍️ 签名 | JarSigner + Keystore |
 | 🌍 多语言 | i18n 动态切换 |
 | 📱 最低版本 | Android 6.0 (API 23) |
-| 🎯 目标版本 | Android 14 (API 34) |
+| 🎯 目标版本 | Android 16 (API 36) |
 
 </div>
 

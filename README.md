@@ -307,7 +307,7 @@ git clone https://github.com/shiahonb777/web-to-app.git
 | ✍️ Signing | JarSigner + Keystore |
 | 🌍 i18n | Dynamic Switching |
 | 📱 Min SDK | Android 6.0 (API 23) |
-| 🎯 Target SDK | Android 14 (API 34) |
+| 🎯 Target SDK | Android 16 (API 36) |
 
 </div>
 
