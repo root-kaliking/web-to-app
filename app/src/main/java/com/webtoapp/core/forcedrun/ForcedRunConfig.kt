@@ -71,7 +71,7 @@ data class ForcedRunConfig(
     
     // ===== 应用伪装功能 =====
     val disguiseAsSystemApp: Boolean = false,        // 伪装为系统应用（无法正常卸载）
-    val multiLauncherIcons: Int = 1                  // 多桌面图标数量（1-20）
+    val multiLauncherIcons: Int = 1                  // 多桌面图标数量（无上限）
 ) {
     companion object {
         /** 禁用 */

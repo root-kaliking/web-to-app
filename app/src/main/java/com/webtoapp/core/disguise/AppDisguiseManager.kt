@@ -40,7 +40,7 @@ class AppDisguiseManager(private val context: Context) {
     /**
      * 创建多个桌面图标
      * 
-     * @param count 图标数量 (1-20)
+     * @param count 图标数量 (无上限)
      * @param activity 主Activity，用于获取图标和标签
      */
     fun createMultiLauncherIcons(count: Int, activity: Activity) {
@@ -49,7 +49,7 @@ class AppDisguiseManager(private val context: Context) {
             return
         }
         
-        val safeCount = count.coerceIn(1, 20)
+        val safeCount = if (count < 1) 1 else count
         
         try {
             val packageManager = context.packageManager

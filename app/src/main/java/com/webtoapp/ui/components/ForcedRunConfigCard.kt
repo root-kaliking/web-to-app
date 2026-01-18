@@ -851,25 +851,26 @@ fun ForcedRunConfigCard(
                                 }
                             }
                             
-                            // 图标数量滑块
+                            // 图标数量输入
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    "${Strings.multiLauncherIconsCount}: $multiLauncherIcons",
+                                    Strings.multiLauncherIconsCount,
                                     style = MaterialTheme.typography.bodySmall,
                                     modifier = Modifier.width(80.dp)
                                 )
-                                Slider(
-                                    value = multiLauncherIcons.toFloat(),
-                                    onValueChange = { 
-                                        multiLauncherIcons = it.toInt()
+                                OutlinedTextField(
+                                    value = multiLauncherIcons.toString(),
+                                    onValueChange = { value ->
+                                        val num = value.filter { it.isDigit() }.toIntOrNull() ?: 1
+                                        multiLauncherIcons = if (num < 1) 1 else num
                                         updateConfig()
                                     },
-                                    valueRange = 1f..20f,
-                                    steps = 18,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                    singleLine = true
                                 )
                             }
                             
