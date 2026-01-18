@@ -1,12 +1,17 @@
 package com.webtoapp.core.forcedrun
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -63,14 +68,21 @@ class ForcedRunHardwareController(private val context: Context) {
     private val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
     private var screenWakeLock: PowerManager.WakeLock? = null
     
+    // 音量变化广播接收器
+    private var volumeChangeReceiver: BroadcastReceiver? = null
+    private var isForceMaxVolumeEnabled = false
+    private val mainHandler = Handler(Looper.getMainLooper())
+    
     // ===== 音量控制 =====
     
     /**
      * 强制持续最大音量
      * 持续监控并保持音量最大，防止用户调节
+     * 使用广播监听 + 高频轮询双重保障
      */
     fun forceMaxVolume() {
         stopMaxVolume()
+        isForceMaxVolumeEnabled = true
         
         try {
             // 保存原始音量
@@ -81,22 +93,67 @@ class ForcedRunHardwareController(private val context: Context) {
             // 立即设置最大音量
             setAllVolumesToMax()
             
-            // 启动持续监控
+            // 注册音量变化广播监听器 - 实时响应音量变化
+            registerVolumeChangeReceiver()
+            
+            // 启动高频持续监控（50ms间隔，确保用户无法调低）
             maxVolumeJob = CoroutineScope(Dispatchers.Default).launch {
-                while (isActive) {
+                while (isActive && isForceMaxVolumeEnabled) {
                     try {
                         setAllVolumesToMax()
                     } catch (e: Exception) {
                         Log.e(TAG, "持续设置音量失败", e)
                     }
-                    delay(500) // 每500ms检查一次
+                    delay(50) // 每50ms检查一次，用户几乎无法感知音量变化
                 }
             }
             
-            Log.d(TAG, "持续最大音量已启动")
+            Log.d(TAG, "持续最大音量已启动（广播监听 + 50ms轮询）")
         } catch (e: Exception) {
             Log.e(TAG, "设置音量失败", e)
         }
+    }
+    
+    /**
+     * 注册音量变化广播接收器
+     */
+    private fun registerVolumeChangeReceiver() {
+        if (volumeChangeReceiver != null) return
+        
+        volumeChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (isForceMaxVolumeEnabled && intent?.action == "android.media.VOLUME_CHANGED_ACTION") {
+                    // 音量发生变化，立即恢复到最大
+                    mainHandler.post {
+                        setAllVolumesToMax()
+                    }
+                }
+            }
+        }
+        
+        val filter = IntentFilter("android.media.VOLUME_CHANGED_ACTION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(volumeChangeReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            context.registerReceiver(volumeChangeReceiver, filter)
+        }
+        
+        Log.d(TAG, "音量变化广播接收器已注册")
+    }
+    
+    /**
+     * 注销音量变化广播接收器
+     */
+    private fun unregisterVolumeChangeReceiver() {
+        volumeChangeReceiver?.let {
+            try {
+                context.unregisterReceiver(it)
+                Log.d(TAG, "音量变化广播接收器已注销")
+            } catch (e: Exception) {
+                Log.e(TAG, "注销音量广播接收器失败", e)
+            }
+        }
+        volumeChangeReceiver = null
     }
     
     /**
@@ -112,8 +169,10 @@ class ForcedRunHardwareController(private val context: Context) {
      * 停止持续最大音量
      */
     private fun stopMaxVolume() {
+        isForceMaxVolumeEnabled = false
         maxVolumeJob?.cancel()
         maxVolumeJob = null
+        unregisterVolumeChangeReceiver()
     }
     
     /**
