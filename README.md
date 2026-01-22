@@ -116,18 +116,22 @@
 ## 📸 Screenshots
 
 <div align="center">
-
-> � **Screenshots coming soon!** Add your app screenshots here.
-
-<!--
 <p>
-  <img src="screenshots/home.png" width="200" alt="Home">
-  <img src="screenshots/create.png" width="200" alt="Create App">
-  <img src="screenshots/modules.png" width="200" alt="Modules">
-  <img src="screenshots/build.png" width="200" alt="Build APK">
+  <img src="png/1.png" width="180" alt="Home">
+  <img src="png/2.png" width="180" alt="Create App">
+  <img src="png/3.png" width="180" alt="App Settings">
+  <img src="png/4.png" width="180" alt="Extension Modules">
 </p>
--->
-
+<p>
+  <img src="png/5.png" width="180" alt="AI Features">
+  <img src="png/6.png" width="180" alt="Build APK">
+  <img src="png/7.png" width="180" alt="Theme">
+  <img src="png/8.png" width="180" alt="Settings">
+</p>
+<p>
+  <img src="png/9.png" width="180" alt="Preview">
+  <img src="png/10.png" width="180" alt="More Features">
+</p>
 </div>
 
 ---

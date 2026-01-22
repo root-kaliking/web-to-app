@@ -116,18 +116,22 @@
 ## 📸 应用截图
 
 <div align="center">
-
-> 📷 **截图即将上线！** 在此添加应用截图。
-
-<!--
 <p>
-  <img src="screenshots/home.png" width="200" alt="首页">
-  <img src="screenshots/create.png" width="200" alt="创建应用">
-  <img src="screenshots/modules.png" width="200" alt="扩展模块">
-  <img src="screenshots/build.png" width="200" alt="构建 APK">
+  <img src="png/1.png" width="180" alt="首页">
+  <img src="png/2.png" width="180" alt="创建应用">
+  <img src="png/3.png" width="180" alt="应用设置">
+  <img src="png/4.png" width="180" alt="扩展模块">
 </p>
--->
-
+<p>
+  <img src="png/5.png" width="180" alt="AI 功能">
+  <img src="png/6.png" width="180" alt="构建 APK">
+  <img src="png/7.png" width="180" alt="主题">
+  <img src="png/8.png" width="180" alt="设置">
+</p>
+<p>
+  <img src="png/9.png" width="180" alt="预览">
+  <img src="png/10.png" width="180" alt="更多功能">
+</p>
 </div>
 
 ---
